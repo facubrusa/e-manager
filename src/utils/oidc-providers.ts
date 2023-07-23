@@ -1,27 +1,47 @@
-import { sleep } from "./helpers";
-
 export const authLogin = async (email: string, password: string) => {
-  await sleep(500); // Simulate request
-  return new Promise((res, rej) => {
-    if (email !== "admin@example.com" || password !== "admin") {
-      return rej({ message: "Credentials are wrong!" });
-    }
-    const authentication = { profile: { email: "admin@example.com" } };
-    localStorage.setItem("authentication", JSON.stringify(authentication));
-    return res(authentication);
-  });
+  const data = {
+    email,
+    password
+  }
+
+  const response = await fetch(`http://localhost:4000/v1/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+  );
+  if (!response.ok) throw new Error("Login is failed");
+  
+  const responseLogin = await response.json();
+  localStorage.setItem('profile', JSON.stringify(responseLogin.user));
+  localStorage.setItem('token', responseLogin.tokens.access.token);
+  
+  return {
+    profile: responseLogin.user,
+    token: responseLogin.tokens.access.token,
+  }
 };
 
-export const getAuthStatus = async () => {
-  await sleep(500); // Simulate request
+export const getLoginData = async () => {
   return new Promise((res, rej) => {
     try {
-      let authentication = localStorage.getItem("authentication");
-      if (!authentication) {
-        throw new Error("Error getting authentication data");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Error getting token data");
       }
-      authentication = JSON.parse(authentication);
-      return res(authentication);
+
+      let profile = localStorage.getItem("profile");
+      if (!profile) {
+        throw new Error("Error getting profile data");
+      }
+      profile = JSON.parse(profile);
+      
+      return res({
+        token,
+        profile
+      });
     } catch (error) {
       console.log(error);
       return rej(null);

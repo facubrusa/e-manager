@@ -1,10 +1,10 @@
-import { MENU } from "@app/modules/main/menu-sidebar/MenuSidebar";
+import { MENU } from "@app/modules/main/menu-sidebar/Menu";
 import { PfDropdown } from "@profabric/react-components";
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-export const StyledDropdown = styled(PfDropdown)`
+export const StyledDropdown = styled(PfDropdown)<{ $isOpen: boolean, $openOnButtonClick: boolean }>`
   border: none;
   width: 100%;
   display: flex;
@@ -62,6 +62,7 @@ export const SidebarSearch = () => {
       setSearchText("");
       setFoundMenuItems([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
 
   useEffect(() => {
@@ -105,15 +106,16 @@ export const SidebarSearch = () => {
   return (
     <StyledDropdown
       ref={dropdown}
-      isOpen={isDropdownOpen}
+      $isOpen={isDropdownOpen}
       hide-arrow
-      openOnButtonClick={false}
+      $openOnButtonClick={false}
     >
       <div slot="button">
         <div className="input-group">
           <input
             className="form-control form-control-sidebar"
             type="text"
+            id="sidebar-search"
             placeholder="Search"
             aria-label="Search"
             value={searchText}

@@ -1,10 +1,10 @@
 // import {SmallBox} from '@app/components';
-// import {ContentHeader} from '@components';
+import {ContentHeader} from '@components';
 
 const Dashboard = () => {
   return (
     <div>
-      {/* <ContentHeader title="Dashboard" /> */}
+      <ContentHeader title="Dashboard" />
 
       <section className="content">
         <div className="container-fluid">

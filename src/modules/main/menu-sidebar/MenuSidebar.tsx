@@ -1,46 +1,11 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { MenuItem } from "@components";
 import { PfImage } from "@profabric/react-components";
 import styled from "styled-components";
+import { MenuItemProps } from "@app/interfaces/menu-sidebar";
 import {SidebarSearch} from '@app/components/sidebar-search/SidebarSearch';
-
-export interface IMenuItem {
-  name: string;
-  icon: string;
-  path?: string;
-  children?: Array<IMenuItem>;
-}
-
-export const MENU: IMenuItem[] = [
-  {
-    name: "Dashboard",
-    icon: "fas fa-tachometer-alt nav-icon",
-    path: "/",
-  },
-  {
-    name: "Blank",
-    icon: "fas fa-wrench nav-icon",
-    path: "/blank",
-  },
-  {
-    name: "Main Menu",
-    icon: "far fa-caret-square-down nav-icon",
-    children: [
-      {
-        name: "Sub Menu",
-        icon: "fas fa-hammer nav-icon",
-        path: "/sub-menu-1",
-      },
-
-      {
-        name: "Blank Sub Menu",
-        icon: "fas fa-cogs nav-icon",
-        path: "/sub-menu-2",
-      },
-    ],
-  },
-];
+import MenuItem from "@app/components/menu-item/MenuItem";
+import { MENU } from "./Menu";
 
 const StyledBrandImage = styled(PfImage)`
   float: left;
@@ -56,7 +21,7 @@ const StyledUserImage = styled(PfImage)`
 `;
 
 const MenuSidebar = () => {
-  const authentication = useSelector((state: any) => state.auth.authentication);
+  const profile = useSelector((state: any) => state.auth.profile);
   const sidebarSkin: string = useSelector((state: any) => state.ui.sidebarSkin);
   const menuItemFlat = useSelector((state: any) => state.ui.menuItemFlat);
   const menuChildIndent = useSelector((state: any) => state.ui.menuChildIndent);
@@ -77,8 +42,7 @@ const MenuSidebar = () => {
         <div className="user-panel mt-3 pb-3 mb-3 d-flex">
           <div className="image">
             <StyledUserImage
-              src={authentication.profile.picture}
-              fallbackSrc="/img/default-profile.png"
+              src={profile.picture || "/img/default-profile.png"}
               alt="User"
               width={34}
               height={34}
@@ -87,7 +51,7 @@ const MenuSidebar = () => {
           </div>
           <div className="info">
             <Link to="/profile" className="d-block">
-              {authentication.profile.email}
+              {profile.email}
             </Link>
           </div>
         </div>
@@ -103,7 +67,7 @@ const MenuSidebar = () => {
             }${menuChildIndent ? " nav-child-indent" : ""}`}
             role="menu"
           >
-            {MENU.map((menuItem: IMenuItem) => (
+            {MENU.map((menuItem: MenuItemProps) => (
               <MenuItem
                 key={`${menuItem.name} ${menuItem.path || ''}`}
                 menuItem={menuItem}

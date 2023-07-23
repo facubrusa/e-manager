@@ -18,7 +18,7 @@ const Main = () => {
     (state: any) => state.ui.controlSidebarCollapsed
   );
   const screenSize = useSelector((state: any) => state.ui.screenSize);
-  const authentication = useSelector((state: any) => state.auth.authentication);
+  const token = useSelector((state: any) => state.auth.token);
   const [isAppLoaded, setIsAppLoaded] = useState(false);
 
   const handleToggleMenuSidebar = () => {
@@ -26,8 +26,8 @@ const Main = () => {
   };
 
   useEffect(() => {
-    setIsAppLoaded(Boolean(authentication));
-  }, [authentication]);
+    setIsAppLoaded(Boolean(token));
+  }, [token]);
 
   useEffect(() => {
     removeWindowClass("register-page");
@@ -84,10 +84,8 @@ const Main = () => {
         <MenuSidebar />
 
         <div className="content-wrapper">
-          <div className="pt-3" />
-          <section className="content">
-            <Outlet />
-          </section>
+          <div className="pt-3"></div>
+          <Outlet />
         </div>
         <Footer />
         <ControlSidebar />

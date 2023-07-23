@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
-import { setAuthentication } from "@store/reducers/auth";
+import { setProfile, setToken } from "@store/reducers/auth";
 import { setWindowClass } from "@app/utils/helpers";
 import { PfCheckbox, PfButton } from "@profabric/react-components";
 import * as Yup from "yup";
@@ -19,8 +19,10 @@ const Login = () => {
   const login = async (email: string, password: string) => {
     try {
       setAuthLoading(true);
-      const response = await authLogin(email, password);
-      dispatch(setAuthentication(response as any));
+      const response: any = await authLogin(email, password);
+      dispatch(setProfile(response.profile));
+      dispatch(setToken(response.token));
+      
       toast.success("Login is succeed!");
       navigate("/");
     } catch (error: any) {

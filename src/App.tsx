@@ -14,11 +14,13 @@ import { setWindowSize } from '@app/store/reducers/ui';
 
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
-import { setAuthentication } from './store/reducers/auth';
+import { setProfile, setToken } from './store/reducers/auth';
 import {
-  getAuthStatus,
+  getLoginData,
 } from './utils/oidc-providers';
 import { ToastContainer } from 'react-toastify';
+import CreateUser from './components/users/CreateUser';
+import ListUsers from './components/users/ListUsers';
 
 const App = () => {
   const windowSize = useWindowSize();
@@ -28,12 +30,13 @@ const App = () => {
 
   useEffect(() => {
     // Check session
-    getAuthStatus()
+    getLoginData()
     .then((response: any) => {
       if (!response) {
         throw new Error('Error getting authStatus');
       }
-      dispatch(setAuthentication(response));
+      dispatch(setToken(response.token));
+      dispatch(setProfile(response.profile));
     })
     .catch((error) => console.log(error))
     .finally(() => setIsAppLoading(false))
@@ -59,6 +62,8 @@ const App = () => {
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/create-user" element={<CreateUser />} />
+            <Route path="/list-users" element={<ListUsers />} />
           </Route>
         </Route>
       </Routes>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { DateTime } from 'luxon';
 import styled from 'styled-components';
 import { PfDropdown, PfImage } from '@profabric/react-components';
-import { setAuthentication } from '@app/store/reducers/auth';
+import { setToken } from '@app/store/reducers/auth';
 
 const StyledSmallUserImage = styled(PfImage)`
   margin-top: 3px;
@@ -81,7 +81,7 @@ const UserFooter = styled.li`
   }
 `;
 
-export const StyledDropdown = styled(PfDropdown)`
+export const StyledDropdown = styled(PfDropdown)<{ $isOpen: boolean }>`
   border: none;
   width: 3rem;
   display: flex;
@@ -104,16 +104,15 @@ export const StyledDropdown = styled(PfDropdown)`
 const UserDropdown = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authentication = useSelector((state: any) => state.auth.authentication);
+  const profile = useSelector((state: any) => state.auth.profile);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const logOut = (event: any) => {
     event.preventDefault();
     setDropdownOpen(false);
-    console.log('authentication', authentication);
-    dispatch(setAuthentication(undefined));
+    dispatch(setToken(undefined));
     navigate('/login');
-    localStorage.removeItem('authentication');
+    localStorage.removeItem('token');
   };
 
   const navigateToProfile = (event: any) => {
@@ -123,11 +122,10 @@ const UserDropdown = () => {
   };
 
   return (
-    <StyledDropdown isOpen={dropdownOpen} hideArrow>
+    <StyledDropdown $isOpen={dropdownOpen} hideArrow>
       <StyledSmallUserImage
         slot="button"
-        src={authentication.profile.picture}
-        fallbackSrc="/img/default-profile.png"
+        src={profile.picture || "/img/default-profile.png"}
         alt="User"
         width={25}
         height={25}
@@ -136,19 +134,18 @@ const UserDropdown = () => {
       <div slot="menu">
         <UserHeader className=" bg-primary">
           <StyledBigUserImage
-            src={authentication.profile.picture}
-            fallbackSrc="/img/default-profile.png"
+            src={profile.picture || "/img/default-profile.png"}
             alt="User"
             width={90}
             height={90}
             rounded
           />
           <p>
-            {authentication.profile.email}
+            {profile.email}
             <small>
               <span>Member since </span>
               <span>
-                {/* {DateTime.fromISO(user.createdAt).toFormat('dd LLL yyyy')} */}
+                {/* {DateTime.fromISO(profile.createdAt).toFormat('dd LLL yyyy')} */}
               </span>
             </small>
           </p>

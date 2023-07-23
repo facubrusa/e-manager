@@ -1,23 +1,39 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { clientAxios } from '@app/config/Axios';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isEmailVerified?: boolean;
+}
 
 export interface AuthState {
-  authentication?: null | string
+  token?: string | null;
+  profile: User | null;
 }
 
 const initialState: AuthState = {
-  authentication: null
+  token: null,
+  profile: null,
 };
 
-export const authSlice = createSlice({
+export const authSlice: any = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuthentication: (state: any, {payload}: any) => {
-      state.authentication = payload;
-    }
-  }
+    setProfile: (state, action: PayloadAction<User>) => {
+      state.profile = action.payload;
+    },
+    setToken: (state: any, action: any) => {
+      const token: string = action.payload;
+      state.token = token;
+      clientAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    },
+  },
 });
 
-export const {setAuthentication} = authSlice.actions;
+export const { setProfile, setToken } = authSlice.actions;
 
 export default authSlice.reducer;

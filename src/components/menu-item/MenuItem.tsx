@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { NavLink, useNavigate, useLocation, Location } from "react-router-dom";
-import { IMenuItem } from "@app/modules/main/menu-sidebar/MenuSidebar";
+import { useEffect, useState } from 'react';
+import { NavLink, useNavigate, useLocation, Location } from 'react-router-dom';
+import { MenuItemProps } from '@app/interfaces/menu-sidebar';
 
-const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
+const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
   const [isMenuExtended, setIsMenuExtended] = useState(false);
   const [isExpandable, setIsExpandable] = useState(false);
   const [isMainActive, setIsMainActive] = useState(false);
@@ -19,7 +19,7 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
       toggleMenu();
       return;
     }
-    navigate(menuItem.path ? menuItem.path : "/");
+    navigate(menuItem.path ? menuItem.path : '/');
   };
 
   const calculateIsActive = (url: Location) => {
@@ -55,34 +55,40 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
     );
   }, [menuItem]);
 
+  const hasChildren = menuItem.children && menuItem.children.length > 0;
+  let marginLeft = '';
+  switch (menuItem.level) {
+    case 1:
+      marginLeft = '';
+      break;
+    case 2:
+      marginLeft = 'ml-2'
+      break;
+    case 3:
+      marginLeft = 'ml-4'
+      break;
+  }
   return (
-    <li className={`nav-item${isMenuExtended ? " menu-open" : ""}`}>
+    <li className={`nav-item${isMenuExtended ? ' menu-open' : ''}`}>
       <a
-        className={`nav-link${
-          isMainActive || isOneOfChildrenActive ? " active" : ""
-        }`}
-        role="link"
+        className={`nav-link${isMainActive || isOneOfChildrenActive ? ' active' : ''}`}
+        role='link'
         onClick={handleMainMenuAction}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
       >
-        <i className={menuItem.icon} />
+        <i className={`${menuItem.icon} ${marginLeft}`} />
         <p>{menuItem.name}</p>
-        {isExpandable ? <i className="right fas fa-angle-left" /> : null}
+        {hasChildren ? <i className='right fas fa-angle-left' /> : null}
       </a>
 
-      {isExpandable &&
-        menuItem &&
-        menuItem.children &&
-        menuItem.children.map((item) => (
-          <ul key={item.name} className="nav nav-treeview">
-            <li className="nav-item">
-              <NavLink className="nav-link" to={`${item.path || ''}`}>
-                <i className={item.icon} />
-                <p>{item.name}</p>
-              </NavLink>
-            </li>
-          </ul>
-        ))}
+      {hasChildren && (
+        <ul className='nav nav-treeview'>
+          {menuItem.children &&
+            menuItem.children.map((child: MenuItemProps, index: number) => (
+              <MenuItem key={index} menuItem={child} />
+            ))}
+        </ul>
+      )}
     </li>
   );
 };

@@ -12344,6 +12344,12 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
   border-left-width: 0;
 }
 
+.form-section {
+  margin: 15px 0px 20px 0px!important;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+
 .form-control-navbar {
   border-right-width: 0;
 }
