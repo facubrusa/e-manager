@@ -4,9 +4,9 @@ import { UserProps } from "@app/interfaces/users";
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const ListUsers = () => {
-  const [selectedRows, setSelectedRows] = useState<UserProps[]>([]);
   const [toggledClearRows, setToggleClearRows] = useState<boolean>(false);
   const [pending, setPending] = useState(true);
   const [rows, setRows] = useState<UserProps[]>([]);
@@ -52,33 +52,16 @@ const ListUsers = () => {
     },
   ];
 
-  const handleChange = (e: any) => {
-    setSelectedRows(e.selectedRows);
-  };
-
-  const handleClearRows = () => {
-    setToggleClearRows(!toggledClearRows);
-  };
-
-  const handleEdit = (data: any) => {
-    console.log(data);
-    console.log('edit');
-  };
-
   const handleDelete = (data: any) => {
     console.log(data);
     console.log('delete');
   };
 
   const listActions = (param: UserProps) => {
+    console.log(param.id);
     return (
       <>
-        <button
-          className='btn btn-primary mr-2'
-          onClick={() => handleEdit(param)}
-        >
-          <i className='fas fa-edit'></i>
-        </button>
+        <Link to={`/edit-user/${param.id}`} className='btn btn-primary mr-2'><i className='fas fa-edit'></i></Link>
         <button className='btn btn-danger' onClick={() => handleDelete(param)}>
           <i className='fas fa-trash-alt'></i>
         </button>
@@ -108,24 +91,12 @@ const ListUsers = () => {
                 </div>
               </div>
               <div className='card-body'>
-                {selectedRows.length > 0 && (
-                  <button
-                    className='btn btn-secondary'
-                    onClick={handleClearRows}
-                  >
-                    Clear Selected
-                  </button>
-                )}
-
                 <DataTable
                   columns={columns}
                   data={rows}
                   highlightOnHover
                   pagination
                   responsive
-                  selectableRows
-                  selectableRowsHighlight
-                  onSelectedRowsChange={handleChange}
                   clearSelectedRows={toggledClearRows}
                   progressPending={pending}
                 />

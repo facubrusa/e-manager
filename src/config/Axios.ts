@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import config from './config';
 
 const axiosApi = () => {
   const client = axios.create({
-    baseURL: 'http://localhost:4000/v1',
+    baseURL: config.backendUrl,
   });
 
   client.interceptors.response.use(

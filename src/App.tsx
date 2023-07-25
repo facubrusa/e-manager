@@ -19,7 +19,7 @@ import {
   getLoginData,
 } from './utils/oidc-providers';
 import { ToastContainer } from 'react-toastify';
-import CreateUser from './components/users/CreateUser';
+import AddEditUser from './components/users/AddEditUser';
 import ListUsers from './components/users/ListUsers';
 
 const App = () => {
@@ -62,8 +62,9 @@ const App = () => {
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/create-user" element={<CreateUser />} />
             <Route path="/list-users" element={<ListUsers />} />
+            <Route path="/users/add" element={<AddEditUser />} />
+            <Route path="/users/edit/:id" element={<AddEditUser />} />
           </Route>
         </Route>
       </Routes>

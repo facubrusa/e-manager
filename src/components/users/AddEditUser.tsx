@@ -5,23 +5,29 @@ import Form from 'react-bootstrap/Form';
 import ContentHeader from '@app/components/content-header/ContentHeader';
 import { clientAxios } from '@app/config/Axios';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const CreateUser = () => {
-  const { handleChange, values, handleSubmit, touched, errors } = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      role: '',
-    },
+  const { id } = useParams();
+  console.log(id);
+  const [userData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
+  });
+
+  const { handleChange, values, handleSubmit, touched, errors, resetForm } = useFormik({
+    initialValues: userData,
     validationSchema: Yup.object({
       name: Yup.string()
         .min(4, 'Must be at least 4 characters')
         .required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()
-        .min(6, 'Must be at least 6 characters')
+        .min(8, 'Must be at least 8 characters')
         .required('Required'),
       confirmPassword: Yup.string().oneOf(
         [Yup.ref('password')],
@@ -31,8 +37,13 @@ const CreateUser = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const createdUser = await clientAxios.post('/users', values);
-        console.log(createdUser);
+        const data = {
+          ...values,
+          confirmPassword: undefined,
+        }
+        await clientAxios.post('/users', data);
+        toast.success('User created successfully')
+        resetForm();
       } catch (error) {
         console.log(error);
       }

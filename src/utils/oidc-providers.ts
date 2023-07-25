@@ -1,10 +1,12 @@
+import config from "@app/config/config";
+
 export const authLogin = async (email: string, password: string) => {
   const data = {
     email,
     password
   }
 
-  const response = await fetch(`http://localhost:4000/v1/auth/login`, {
+  const response = await fetch(`${config.backendUrl}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
