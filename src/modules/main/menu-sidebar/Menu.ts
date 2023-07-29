@@ -15,13 +15,13 @@ export const MENU: MenuItemProps[] = [
       {
         name: "Create user",
         icon: "fas fa-plus nav-icon",
-        path: "/create-user",
+        path: "/users/add",
         level: 2,
       },
       {
         name: "List users",
         icon: "fas fa-th-list nav-icon",
-        path: "/list-users",
+        path: "/users/list",
         level: 2,
       },
     ],

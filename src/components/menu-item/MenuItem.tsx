@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate, useLocation, Location } from 'react-router-dom';
+import { useNavigate, useLocation, Location } from 'react-router-dom';
 import { MenuItemProps } from '@app/interfaces/menu-sidebar';
 
 const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {

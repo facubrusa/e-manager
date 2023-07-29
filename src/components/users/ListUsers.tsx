@@ -58,7 +58,6 @@ const ListUsers = () => {
   };
 
   const listActions = (param: UserProps) => {
-    console.log(param.id);
     return (
       <>
         <Link to={`/edit-user/${param.id}`} className='btn btn-primary mr-2'><i className='fas fa-edit'></i></Link>
