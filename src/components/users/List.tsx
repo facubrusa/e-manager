@@ -3,15 +3,11 @@ import { clientAxios } from '@app/config/Axios';
 import { UserProps } from "@app/interfaces/users";
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const ListUsers = () => {
-  const [toggledClearRows, setToggleClearRows] = useState<boolean>(false);
+const List = () => {
   const [pending, setPending] = useState(true);
-  const [rows, setRows] = useState<UserProps[]>([]);
-
-  const dispatch = useDispatch();
+  const [users, setUsers] = useState<UserProps[]>([]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -21,7 +17,7 @@ const ListUsers = () => {
 
     getUsers()
       .then((data) => {
-        setRows(data);
+        setUsers(data);
       })
       .catch((err) => {
         console.log(err.response);
@@ -60,7 +56,7 @@ const ListUsers = () => {
   const listActions = (param: UserProps) => {
     return (
       <>
-        <Link to={`/edit-user/${param.id}`} className='btn btn-primary mr-2'><i className='fas fa-edit'></i></Link>
+        <Link to={`/users/edit/${param.id}`} className='btn btn-primary mr-2'><i className='fas fa-edit'></i></Link>
         <button className='btn btn-danger' onClick={() => handleDelete(param)}>
           <i className='fas fa-trash-alt'></i>
         </button>
@@ -92,11 +88,10 @@ const ListUsers = () => {
               <div className='card-body'>
                 <DataTable
                   columns={columns}
-                  data={rows}
+                  data={users}
                   highlightOnHover
                   pagination
                   responsive
-                  clearSelectedRows={toggledClearRows}
                   progressPending={pending}
                 />
               </div>
@@ -110,4 +105,4 @@ const ListUsers = () => {
   );
 };
 
-export default ListUsers;
+export default List;

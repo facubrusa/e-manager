@@ -1,26 +1,23 @@
-import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import Main from '@modules/main/Main';
-import Login from './components/login/Login';
+import Main from "@modules/main/Main";
+import Login from "./components/login/Login";
 
-import Dashboard from '@pages/Dashboard';
+import Dashboard from "@pages/Dashboard";
 
-import { useWindowSize } from '@app/hooks/useWindowSize';
-import { calculateWindowSize } from '@app/utils/helpers';
-import { setWindowSize } from '@app/store/reducers/ui';
+import { useWindowSize } from "@app/hooks/useWindowSize";
+import { calculateWindowSize } from "@app/utils/helpers";
+import { setWindowSize } from "@app/store/reducers/ui";
 
-
-import PublicRoute from './routes/PublicRoute';
-import PrivateRoute from './routes/PrivateRoute';
-import { setProfile, setToken } from './store/reducers/auth';
-import {
-  getLoginData,
-} from './utils/oidc-providers';
-import { ToastContainer } from 'react-toastify';
-import AddEditUser from './components/users/AddEditUser';
-import ListUsers from './components/users/ListUsers';
+import PublicRoute from "./routes/PublicRoute";
+import PrivateRoute from "./routes/PrivateRoute";
+import { setProfile, setToken } from "./store/reducers/auth";
+import { getLoginData } from "./utils/oidc-providers";
+import { ToastContainer } from "react-toastify";
+import AddEdit from "./components/users/AddEdit";
+import List from "./components/users/List";
 
 const App = () => {
   const windowSize = useWindowSize();
@@ -31,15 +28,16 @@ const App = () => {
   useEffect(() => {
     // Check session
     getLoginData()
-    .then((response: any) => {
-      if (!response) {
-        throw new Error('Error getting authStatus');
-      }
-      dispatch(setToken(response.token));
-      dispatch(setProfile(response.profile));
-    })
-    .catch((error) => console.log(error))
-    .finally(() => setIsAppLoading(false))
+      .then((response: any) => {
+        if (!response) {
+          throw new Error("Error getting authStatus");
+        }
+        dispatch(setToken(response.token));
+        dispatch(setProfile(response.profile));
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setIsAppLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -47,6 +45,7 @@ const App = () => {
     if (screenSize !== size) {
       dispatch(setWindowSize(size));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [windowSize]);
 
   if (isAppLoading) {
@@ -62,9 +61,9 @@ const App = () => {
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/users/list" element={<ListUsers />} />
-            <Route path="/users/add" element={<AddEditUser />} />
-            <Route path="/users/edit/:id" element={<AddEditUser />} />
+            <Route path={`users/list`} element={<List />} />
+            <Route path={`users/add`} element={<AddEdit />} />
+            <Route path={`users/edit/:id`} element={<AddEdit />} />
           </Route>
         </Route>
       </Routes>
