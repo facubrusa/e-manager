@@ -1,7 +1,8 @@
-import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 interface Props {
@@ -17,26 +18,32 @@ const ChangePasswordModal = (props: Props) => {
     confirmPassword: '',
   };
 
-  const { handleChange, values, handleSubmit, touched, errors, resetForm } = useFormik({
-    initialValues: initUserForm,
-    validationSchema: Yup.object({
-      password: Yup.string()
-        .min(8, 'Must be at least 8 characters')
-        .required('Required'),
-      confirmPassword: Yup.string().oneOf(
-        [Yup.ref('password')],
-        'Passwords must match'
-      ),
-    }),
-    onSubmit: (values) => {
-      changePassword(values.password);
-      resetForm();
-      onHide();
-    },
-  });
+  const { handleChange, values, handleSubmit, touched, errors, resetForm } =
+    useFormik({
+      initialValues: initUserForm,
+      validationSchema: Yup.object({
+        password: Yup.string()
+          .min(8, 'Must be at least 8 characters')
+          .required('Required'),
+        confirmPassword: Yup.string().oneOf(
+          [Yup.ref('password')],
+          'Passwords must match'
+        ),
+      }),
+      onSubmit: (values) => {
+        changePassword(values.password);
+        resetForm();
+        onHide();
+      },
+    });
 
   return (
-    <Modal show={show} onHide={onHide} aria-labelledby='contained-modal-title-vcenter' centered>
+    <Modal
+      show={show}
+      onHide={onHide}
+      aria-labelledby='contained-modal-title-vcenter'
+      centered
+    >
       <Form onSubmit={handleSubmit}>
         <Modal.Header>
           <Modal.Title id='contained-modal-title-vcenter'>
@@ -98,10 +105,12 @@ const ChangePasswordModal = (props: Props) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='success' type="submit">
+          <Button variant='success' type='submit'>
             Change
           </Button>
-          <Button variant='secondary' onClick={props.onHide}>Close</Button>
+          <Button variant='secondary' onClick={props.onHide}>
+            Close
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>

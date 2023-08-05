@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { setToken } from '@app/store/reducers/auth';
+import { PfDropdown, PfImage } from '@profabric/react-components';
 // import { DateTime } from 'luxon';
 import styled from 'styled-components';
-import { PfDropdown, PfImage } from '@profabric/react-components';
-import { setToken } from '@app/store/reducers/auth';
 
 const StyledSmallUserImage = styled(PfImage)`
   margin-top: 3px;
@@ -124,18 +125,18 @@ const UserDropdown = () => {
   return (
     <StyledDropdown $isOpen={dropdownOpen} hideArrow>
       <StyledSmallUserImage
-        slot="button"
-        src={profile.picture || "/img/default-profile.png"}
-        alt="User"
+        slot='button'
+        src={profile.picture || '/img/default-profile.png'}
+        alt='User'
         width={25}
         height={25}
         rounded
       />
-      <div slot="menu">
-        <UserHeader className=" bg-primary">
+      <div slot='menu'>
+        <UserHeader className=' bg-primary'>
           <StyledBigUserImage
-            src={profile.picture || "/img/default-profile.png"}
-            alt="User"
+            src={profile.picture || '/img/default-profile.png'}
+            alt='User'
             width={90}
             height={90}
             rounded
@@ -151,29 +152,29 @@ const UserDropdown = () => {
           </p>
         </UserHeader>
         <UserBody>
-          <div className="row">
-            <div className="col-4 text-center">
-              <Link to="/">Followers</Link>
+          <div className='row'>
+            <div className='col-4 text-center'>
+              <Link to='/'>Followers</Link>
             </div>
-            <div className="col-4 text-center">
-              <Link to="/">Sales</Link>
+            <div className='col-4 text-center'>
+              <Link to='/'>Sales</Link>
             </div>
-            <div className="col-4 text-center">
-              <Link to="/">Friends</Link>
+            <div className='col-4 text-center'>
+              <Link to='/'>Friends</Link>
             </div>
           </div>
         </UserBody>
         <UserFooter>
           <button
-            type="button"
-            className="btn btn-default btn-flat"
+            type='button'
+            className='btn btn-default btn-flat'
             onClick={navigateToProfile}
           >
             Profile
           </button>
           <button
-            type="button"
-            className="btn btn-default btn-flat float-right"
+            type='button'
+            className='btn btn-default btn-flat float-right'
             onClick={logOut}
           >
             Sign out

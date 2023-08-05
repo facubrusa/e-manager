@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface User {
   id: string;
@@ -9,7 +9,7 @@ interface User {
 }
 
 interface UsersState {
-  active: User[],
+  active: User[];
 }
 
 const initialState: UsersState = {
@@ -25,9 +25,9 @@ const initialState: UsersState = {
       name: 'Dukex',
       email: 'dukex@gmail.com',
       role: 'user',
-    }
+    },
   ],
-}
+};
 
 export const usersSlice = createSlice({
   name: 'users',
@@ -37,9 +37,9 @@ export const usersSlice = createSlice({
       state.active.push(action.payload);
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { addUser } = usersSlice.actions
+export const { addUser } = usersSlice.actions;
 
-export default usersSlice.reducer
+export default usersSlice.reducer;

@@ -1,6 +1,7 @@
-/* eslint-disable no-unused-vars */
-import {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import useScrollPosition from '@app/hooks/useScrollPosition';
 import {
   setNavbarVariant,
   setSidebarSkin,
@@ -12,16 +13,15 @@ import {
   toggleLayoutFixed,
   toggleMenuChildIndent,
   toggleMenuItemFlat,
-  toggleSidebarMenu
+  toggleSidebarMenu,
 } from '@app/store/reducers/ui';
 import {
   NAVBAR_DARK_VARIANTS,
   NAVBAR_LIGHT_VARIANTS,
   SIDEBAR_DARK_SKINS,
-  SIDEBAR_LIGHT_SKINS
+  SIDEBAR_LIGHT_SKINS,
 } from '@app/utils/themes';
-import useScrollPosition from '@app/hooks/useScrollPosition';
-import {PfCheckbox, PfSelect} from '@profabric/react-components';
+import { PfCheckbox, PfSelect } from '@profabric/react-components';
 
 const ControlSidebar = () => {
   const dispatch = useDispatch();
@@ -93,19 +93,19 @@ const ControlSidebar = () => {
 
   return (
     <aside
-      className="control-sidebar control-sidebar-dark"
+      className='control-sidebar control-sidebar-dark'
       style={{
         top: 0,
         bottom: footerFixed ? '57px' : '0px',
         padding: `${getContainerPaddingTop()} 16px 16px 16px`,
-        overflowY: 'scroll'
+        overflowY: 'scroll',
       }}
     >
       <h5>Customize AdminLTE</h5>
-      <hr className="mb-2" />
+      <hr className='mb-2' />
 
-      <div style={{padding: '8px 0'}}>
-        <div className="mb-4">
+      <div style={{ padding: '8px 0' }}>
+        <div className='mb-4'>
           <PfCheckbox checked={darkMode} onChange={handleDarkModeChange}>
             Dark mode
           </PfCheckbox>
@@ -116,7 +116,7 @@ const ControlSidebar = () => {
 
         <h6>Header Options</h6>
 
-        <div className="mb-4">
+        <div className='mb-4'>
           <PfCheckbox checked={headerFixed} onChange={handleHeaderFixedChange}>
             Fixed
           </PfCheckbox>
@@ -130,7 +130,7 @@ const ControlSidebar = () => {
 
         <h6>Sidebar Options</h6>
 
-        <div className="mb-4">
+        <div className='mb-4'>
           <PfCheckbox
             checked={menuSidebarCollapsed}
             onChange={handleMenuSidebarCollapsed}
@@ -156,56 +156,56 @@ const ControlSidebar = () => {
 
         <h6>Footer Options</h6>
 
-        <div className="mb-4">
+        <div className='mb-4'>
           <PfCheckbox checked={footerFixed} onChange={handleFooterFixedChange}>
             Fixed
           </PfCheckbox>
         </div>
 
         <PfSelect
-          className="mt-3"
+          className='mt-3'
           value={navbarVariant}
-          label="Light Navbar Variants"
+          label='Light Navbar Variants'
           options={NAVBAR_LIGHT_VARIANTS}
           onChange={(e: any) => onNavbarVariantChange(e.target.value)}
-          type="custom"
+          type='custom'
         />
         <PfSelect
-          className="mt-3"
-          label="Dark Navbar Variants"
+          className='mt-3'
+          label='Dark Navbar Variants'
           value={navbarVariant}
           options={NAVBAR_DARK_VARIANTS}
-          type="custom"
+          type='custom'
           onChange={(e: any) => onNavbarVariantChange(e.target.value)}
         />
         <PfSelect
-          className="mt-3"
-          label="Accent Color Variants"
+          className='mt-3'
+          label='Accent Color Variants'
           options={[]}
-          type="custom"
+          type='custom'
           disabled
         />
         <PfSelect
-          className="mt-3"
-          label="Light Sidebar Variants"
+          className='mt-3'
+          label='Light Sidebar Variants'
           value={sidebarSkin}
           options={SIDEBAR_LIGHT_SKINS}
-          type="custom"
+          type='custom'
           onChange={(e: any) => onSidebarSkinChange(e.target.value)}
         />
         <PfSelect
-          className="mt-3"
-          label="Dark Sidebar Variants"
+          className='mt-3'
+          label='Dark Sidebar Variants'
           value={sidebarSkin}
           options={SIDEBAR_DARK_SKINS}
-          type="custom"
+          type='custom'
           onChange={(e: any) => onSidebarSkinChange(e.target.value)}
         />
         <PfSelect
-          className="mt-3"
-          label="Brand Logo Variants"
+          className='mt-3'
+          label='Brand Logo Variants'
           options={[]}
-          type="custom"
+          type='custom'
           disabled
         />
       </div>

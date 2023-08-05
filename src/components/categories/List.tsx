@@ -1,10 +1,11 @@
-import ContentHeader from '@app/components/content-header/ContentHeader';
-import { clientAxios } from '@app/config/Axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { Link } from 'react-router-dom';
 // import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import ContentHeader from '@app/components/content-header/ContentHeader';
+import { clientAxios } from '@app/config/Axios';
 import { CategoryProps } from '@app/interfaces/categories';
 
 interface Props {
@@ -34,7 +35,6 @@ const List = (props: Props) => {
         console.log(err.response);
       })
       .finally(() => setPending(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [
@@ -52,7 +52,6 @@ const List = (props: Props) => {
       cell: (param: CategoryProps) => listActions(param),
     },
   ];
-
 
   const handleDelete = (id: string | undefined) => {
     if (id) {

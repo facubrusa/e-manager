@@ -16,7 +16,7 @@ module.exports = {
     project: true,
     tsconfigRootDir: __dirname,
   },
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "simple-import-sort"],
   rules: {
     "react-refresh/only-export-components": [
       "warn",
@@ -29,5 +29,15 @@ module.exports = {
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/imports": ["error", {
+      groups: [
+        ["^react"],
+        ["^antd"],
+        ["^@?\\w"],
+        ["@/(.*)"],
+        ["^[./]"]
+      ]
+    }] 
   },
 };

@@ -1,10 +1,10 @@
-import {configureStore} from '@reduxjs/toolkit';
-
-import {authSlice} from './reducers/auth';
-import {uiSlice} from './reducers/ui';
+import { configureStore } from '@reduxjs/toolkit';
 // import {createLogger} from 'redux-logger';
 // import usersReducer from './reducers/users/usersSlice';
-import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
+
+import { authSlice } from './reducers/auth';
+import { uiSlice } from './reducers/ui';
 
 const store = configureStore({
   reducer: {

@@ -1,12 +1,14 @@
+import { useEffect, useState } from 'react';
+import DataTable from 'react-data-table-component';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import ContentHeader from '@app/components/content-header/ContentHeader';
 import { clientAxios } from '@app/config/Axios';
 import { UserProps } from '@app/interfaces/users';
-import { useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
-import { Link } from 'react-router-dom';
+
 import ChangePasswordModal from './ChangePasswordModal';
-import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 
 const List = () => {
   const [pending, setPending] = useState(true);
@@ -32,7 +34,6 @@ const List = () => {
         console.log(err.response);
       })
       .finally(() => setPending(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [

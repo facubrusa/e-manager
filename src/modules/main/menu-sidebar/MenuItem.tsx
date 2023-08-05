@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Location } from 'react-router-dom';
-import { MenuItemProps } from '@app/interfaces/menu-sidebar';
 import { useSelector } from 'react-redux';
+import { Location, useLocation, useNavigate } from 'react-router-dom';
+
+import { MenuItemProps } from '@app/interfaces/menu-sidebar';
 
 const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
   const [isMenuExtended, setIsMenuExtended] = useState(false);

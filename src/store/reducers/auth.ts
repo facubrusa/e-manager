@@ -1,5 +1,5 @@
 import { clientAxios } from '@app/config/Axios';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
   id: string;

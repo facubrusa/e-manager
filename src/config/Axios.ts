@@ -1,5 +1,7 @@
-import axios from 'axios';
 import { toast } from 'react-toastify';
+
+import axios from 'axios';
+
 import config from './config';
 
 const axiosApi = () => {
@@ -12,15 +14,15 @@ const axiosApi = () => {
       return response;
     },
     function (error) {
-			console.error(error);
+      console.error(error);
       if (error.response.status === 401) {
-				delete client.defaults.headers.common['Authorization'];
-				localStorage.removeItem('token');
+        delete client.defaults.headers.common['Authorization'];
+        localStorage.removeItem('token');
         window.location.href = '/login';
       }
-			const responseMessage = error?.response?.data?.message;
-			const errorMessage = responseMessage ?? 'Something went wrong';
-			toast.error(errorMessage);
+      const responseMessage = error?.response?.data?.message;
+      const errorMessage = responseMessage ?? 'Something went wrong';
+      toast.error(errorMessage);
       return Promise.reject(error);
     }
   );

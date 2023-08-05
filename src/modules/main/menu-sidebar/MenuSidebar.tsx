@@ -1,10 +1,12 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
+import { MenuItemProps } from '@app/interfaces/menu-sidebar';
+import MenuItem from '@app/modules/main/menu-sidebar/MenuItem';
 import { PfImage } from '@profabric/react-components';
 import styled from 'styled-components';
-import { MenuItemProps } from '@app/interfaces/menu-sidebar';
-import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
-import MenuItem from '@app/modules/main/menu-sidebar/MenuItem';
+
 import { MENU } from './Menu';
 
 const StyledBrandImage = styled(PfImage)`
