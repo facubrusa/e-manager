@@ -4,6 +4,7 @@ export interface MenuItemProps {
   path?: string;
   children?: MenuItemProps[];
   level: number;
+  onlyAdmin: boolean;
 }
 
 export interface SidebarMenuItemProps {

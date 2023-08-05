@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Location } from 'react-router-dom';
 import { MenuItemProps } from '@app/interfaces/menu-sidebar';
+import { useSelector } from 'react-redux';
 
 const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
   const [isMenuExtended, setIsMenuExtended] = useState(false);
@@ -9,6 +10,8 @@ const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
   const [isOneOfChildrenActive, setIsOneOfChildrenActive] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { role } = useSelector((state: any) => state.auth.profile);
 
   const toggleMenu = () => {
     setIsMenuExtended(!isMenuExtended);
@@ -41,6 +44,7 @@ const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
     if (location) {
       calculateIsActive(location);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, isExpandable, menuItem]);
 
   useEffect(() => {
@@ -62,16 +66,18 @@ const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
       marginLeft = '';
       break;
     case 2:
-      marginLeft = 'ml-2'
+      marginLeft = 'ml-2';
       break;
     case 3:
-      marginLeft = 'ml-4'
+      marginLeft = 'ml-4';
       break;
   }
   return (
     <li className={`nav-item${isMenuExtended ? ' menu-open' : ''}`}>
       <a
-        className={`nav-link${isMainActive || isOneOfChildrenActive ? ' active' : ''}`}
+        className={`nav-link${
+          isMainActive || isOneOfChildrenActive ? ' active' : ''
+        }`}
         role='link'
         onClick={handleMainMenuAction}
         style={{ cursor: 'pointer' }}
@@ -84,9 +90,10 @@ const MenuItem = ({ menuItem }: { menuItem: MenuItemProps }) => {
       {hasChildren && (
         <ul className='nav nav-treeview'>
           {menuItem.children &&
-            menuItem.children.map((child: MenuItemProps, index: number) => (
-              <MenuItem key={index} menuItem={child} />
-            ))}
+            menuItem.children.map((child: MenuItemProps, index: number) => {
+              if (child.onlyAdmin && role === 'user') return;
+              return <MenuItem key={index} menuItem={child} />;
+            })}
         </ul>
       )}
     </li>

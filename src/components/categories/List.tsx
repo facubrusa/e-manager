@@ -1,31 +1,33 @@
 import ContentHeader from '@app/components/content-header/ContentHeader';
 import { clientAxios } from '@app/config/Axios';
-import { UserProps } from '@app/interfaces/users';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import ChangePasswordModal from './ChangePasswordModal';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { CategoryProps } from '@app/interfaces/categories';
 
-const List = () => {
+interface Props {
+  active: boolean;
+}
+
+const List = (props: Props) => {
   const [pending, setPending] = useState(true);
-  const [users, setUsers] = useState<UserProps[]>([]);
-  const [modalShow, setModalShow] = useState(false);
-  const [userId, setUserId] = useState<string>('');
-  const [records, setRecords] = useState<UserProps[]>([]);
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  const [records, setRecords] = useState<CategoryProps[]>([]);
 
+  const { active } = props;
   const { role } = useSelector((state: any) => state.auth.profile);
 
   useEffect(() => {
-    const getUsers = async () => {
-      const response = await clientAxios.get('/users?limit=100');
+    const getCategories = async () => {
+      const response = await clientAxios.get('/categories?limit=100');
       return response.data.results;
     };
 
-    getUsers()
+    getCategories()
       .then((data) => {
-        setUsers(data);
+        setCategories(data);
         setRecords(data);
       })
       .catch((err) => {
@@ -42,25 +44,20 @@ const List = () => {
       sortable: true,
     },
     {
-      name: 'Email',
-      selector: (row: any) => row.email,
-      sortable: true,
-    },
-    {
-      name: 'Role',
-      selector: (row: any) => row.role,
-      sortable: true,
+      name: 'Image',
+      cell: (param: any) => <img width={50} height={50} src={param.image} />,
     },
     {
       name: 'Actions',
-      cell: (param: UserProps) => listActions(param),
+      cell: (param: CategoryProps) => listActions(param),
     },
   ];
 
+
   const handleDelete = (id: string | undefined) => {
     if (id) {
-      setUsers(
-        users.map((x) => {
+      setCategories(
+        categories.map((x) => {
           if (x.id === id) {
             x.isDeleting = true;
           }
@@ -69,34 +66,22 @@ const List = () => {
       );
 
       clientAxios
-        .delete(`/users/${id}`)
+        .delete(`/categories/${id}`)
         .then(() => {
-          setUsers((users) => users.filter((x) => x.id !== id));
+          setCategories((categories) => categories.filter((x) => x.id !== id));
         })
         .catch((err) => console.log(err));
     }
   };
 
-  const handleChangePassword = (id: string | undefined) => {
-    if (!id) return;
-    setUserId(id);
-    setModalShow(true);
-  };
-
-  const changePassword = (password: string) => {
-    clientAxios
-      .patch(`/users/${userId}`, { password })
-      .then(() => {
-        toast.success('User password changed successfully');
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const listActions = (param: UserProps) => {
+  const listActions = (param: CategoryProps) => {
     if (!param.id || role !== 'admin') return null;
     return (
       <>
-        <Link to={`/users/edit/${param.id}`} className='btn btn-primary mr-2'>
+        <Link
+          to={`/categories/edit/${param.id}`}
+          className='btn btn-primary mr-2'
+        >
           <i className='fas fa-edit'></i>
         </Link>
         <button
@@ -109,33 +94,31 @@ const List = () => {
             <i className='fas fa-trash-alt'></i>
           )}
         </button>
-        <button
-          className='btn btn-warning'
-          onClick={() => handleChangePassword(param.id)}
-        >
-          <i className='fas fa-key'></i>
-        </button>
       </>
     );
   };
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filteredUsers = users.filter((user) => {
-      return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+    const filteredCategories = categories.filter((category) => {
+      return category.name.toLowerCase().includes(e.target.value.toLowerCase());
     });
-    setRecords(filteredUsers);
+    setRecords(filteredCategories);
   };
+
+  const rows = records.filter((category) => category.active === active);
 
   return (
     <>
-      <ContentHeader title='List users' />
+      <ContentHeader title={`${active ? 'Active' : 'Inactive'} categories`} />
 
       <section className='content'>
         <div className='row'>
           <div className='col-md-12'>
             <div className='card card-primary'>
               <div className='card-header'>
-                <h3 className='card-title'>List of users</h3>
+                <h3 className='card-title'>{`List of ${
+                  active ? 'active' : 'inactive'
+                } categories`}</h3>
                 <div className='card-tools'>
                   <button
                     type='button'
@@ -160,7 +143,7 @@ const List = () => {
                 </div>
                 <DataTable
                   columns={columns}
-                  data={records}
+                  data={rows}
                   highlightOnHover
                   pagination
                   responsive
@@ -173,12 +156,6 @@ const List = () => {
           </div>
         </div>
       </section>
-
-      <ChangePasswordModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        changePassword={changePassword}
-      />
     </>
   );
 };

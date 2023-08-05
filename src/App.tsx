@@ -17,7 +17,8 @@ import { setProfile, setToken } from "./store/reducers/auth";
 import { getLoginData } from "./utils/oidc-providers";
 import { ToastContainer } from "react-toastify";
 import AddEdit from "./components/users/AddEdit";
-import List from "./components/users/List";
+import ListUsers from "./components/users/List";
+import ListCategories from "./components/categories/List";
 
 const App = () => {
   const windowSize = useWindowSize();
@@ -61,9 +62,11 @@ const App = () => {
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path={`users/list`} element={<List />} />
+            <Route path={`users/list`} element={<ListUsers />} />
             <Route path={`users/add`} element={<AddEdit />} />
             <Route path={`users/edit/:id`} element={<AddEdit />} />
+            <Route path={`categories/list/active`} element={<ListCategories active={true}/>} />
+            <Route path={`categories/list/inactive`} element={<ListCategories active={false}/>} />
           </Route>
         </Route>
       </Routes>

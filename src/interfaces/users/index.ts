@@ -1,6 +1,9 @@
 export interface UserProps {
-  id: number;
+  id?: string;
   name: string;
   email: string;
+  password: string;
+  confirmPassword: string;
   role: string;
+  isDeleting?: boolean;
 }

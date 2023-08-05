@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { PfImage } from "@profabric/react-components";
-import styled from "styled-components";
-import { MenuItemProps } from "@app/interfaces/menu-sidebar";
-import {SidebarSearch} from '@app/components/sidebar-search/SidebarSearch';
-import MenuItem from "@app/components/menu-item/MenuItem";
-import { MENU } from "./Menu";
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { PfImage } from '@profabric/react-components';
+import styled from 'styled-components';
+import { MenuItemProps } from '@app/interfaces/menu-sidebar';
+import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
+import MenuItem from '@app/modules/main/menu-sidebar/MenuItem';
+import { MENU } from './Menu';
 
 const StyledBrandImage = styled(PfImage)`
   float: left;
@@ -28,51 +28,54 @@ const MenuSidebar = () => {
 
   return (
     <aside className={`main-sidebar elevation-4 ${sidebarSkin}`}>
-      <Link to="/" className="brand-link">
+      <Link to='/' className='brand-link'>
         <StyledBrandImage
-          src="/img/logo.png"
-          alt="AdminLTE Logo"
+          src='/img/logo.png'
+          alt='AdminLTE Logo'
           width={33}
           height={33}
           rounded
         />
-        <span className="brand-text font-weight-light">AdminLTE 3</span>
+        <span className='brand-text font-weight-light'>AdminLTE 3</span>
       </Link>
-      <div className="sidebar">
-        <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-          <div className="image">
+      <div className='sidebar'>
+        <div className='user-panel mt-3 pb-3 mb-3 d-flex'>
+          <div className='image'>
             <StyledUserImage
-              src={profile.picture || "/img/default-profile.png"}
-              alt="User"
+              src={profile.picture || '/img/default-profile.png'}
+              alt='User'
               width={34}
               height={34}
               rounded
             />
           </div>
-          <div className="info">
-            <Link to="/profile" className="d-block">
+          <div className='info'>
+            <Link to='/profile' className='d-block'>
               {profile.email}
             </Link>
           </div>
         </div>
 
-        <div className="form-inline">
+        <div className='form-inline'>
           <SidebarSearch />
         </div>
 
-        <nav className="mt-2" style={{ overflowY: "hidden" }}>
+        <nav className='mt-2' style={{ overflowY: 'hidden' }}>
           <ul
             className={`nav nav-pills nav-sidebar flex-column${
-              menuItemFlat ? " nav-flat" : ""
-            }${menuChildIndent ? " nav-child-indent" : ""}`}
-            role="menu"
+              menuItemFlat ? ' nav-flat' : ''
+            }${menuChildIndent ? ' nav-child-indent' : ''}`}
+            role='menu'
           >
-            {MENU.map((menuItem: MenuItemProps) => (
-              <MenuItem
-                key={`${menuItem.name} ${menuItem.path || ''}`}
-                menuItem={menuItem}
-              />
-            ))}
+            {MENU.map((menuItem: MenuItemProps) => {
+              if (menuItem.onlyAdmin && profile.role === 'user') return;
+              return (
+                <MenuItem
+                  key={`${menuItem.name} ${menuItem.path || ''}`}
+                  menuItem={menuItem}
+                />
+              );
+            })}
           </ul>
         </nav>
       </div>
