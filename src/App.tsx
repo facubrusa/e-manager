@@ -9,6 +9,7 @@ import { calculateWindowSize } from '@app/utils/helpers';
 import Main from '@modules/main/Main';
 import Dashboard from '@pages/Dashboard';
 
+import AddEditCategories from './components/categories/AddEdit';
 import ListCategories from './components/categories/List';
 import Login from './components/login/Login';
 import AddEditUsers from './components/users/AddEdit';
@@ -60,9 +61,11 @@ const App = () => {
         <Route path='/' element={<PrivateRoute />}>
           <Route path='/' element={<Main />}>
             <Route path='/' element={<Dashboard />} />
+            {/* Users */}
             <Route path={`users/list`} element={<ListUsers />} />
             <Route path={`users/add`} element={<AddEditUsers />} />
             <Route path={`users/edit/:id`} element={<AddEditUsers />} />
+            {/* Categories */}
             <Route
               path={`categories/list/active`}
               element={<ListCategories active={true} />}
@@ -71,6 +74,8 @@ const App = () => {
               path={`categories/list/inactive`}
               element={<ListCategories active={false} />}
             />
+            <Route path={`categories/add`} element={<AddEditCategories />} />
+            <Route path={`categories/edit/:id`} element={<AddEditCategories />} />
           </Route>
         </Route>
       </Routes>

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 import ContentHeader from '@app/components/content-header/ContentHeader';
 import { clientAxios } from '@app/config/Axios';
-import { UserProps } from '@app/interfaces/users';
+import { CategoryProps } from '@app/interfaces/categories';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -13,45 +13,37 @@ const AddEdit = () => {
   const { id } = useParams();
   const isAddMode = !id;
 
-  const initUserForm: UserProps = {
+  const initCategoryForm: CategoryProps = {
     name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: '',
+    active: true,
+    image: '',
+    background_color: '#000000',
   };
 
-  const [userData, setUserData] = useState(initUserForm);
+  const [categoryData, setCategoryData] = useState(initCategoryForm);
 
   const { handleChange, values, handleSubmit, touched, errors, resetForm } =
     useFormik({
       enableReinitialize: true,
-      initialValues: userData,
+      initialValues: categoryData,
       validationSchema: Yup.object({
         name: Yup.string()
           .min(4, 'Must be at least 4 characters')
           .required('Required'),
-        email: Yup.string().email('Invalid email address').required('Required'),
-        password: Yup.string()
-          .min(8, 'Must be at least 8 characters')
-          .required('Required'),
-        confirmPassword: Yup.string().oneOf(
-          [Yup.ref('password')],
-          'Passwords must match'
-        ),
-        role: Yup.string().required('Must select one'),
+        image: Yup.string().required('Must insert one image url'),
+        background_color: Yup.string().required('Must select one'),
       }),
       onSubmit: async (values) => {
         try {
           const data = {
             ...values,
-            confirmPassword: undefined,
+            id: undefined,
           };
           if (isAddMode) {
-            await createUser(data);
+            await createCategory(data);
             resetForm();
           } else {
-            await updateUser(data);
+            await updateCategory(data);
           }
         } catch (error) {
           console.log(error);
@@ -59,42 +51,42 @@ const AddEdit = () => {
       },
     });
 
-  const createUser = async (userData: any) => {
-    await clientAxios.post('/users', userData);
-    toast.success('User created successfully');
+  const createCategory = async (categoryData: any) => {
+    await clientAxios.post('/categories', categoryData);
+    toast.success('Category created successfully');
   };
 
-  const updateUser = async (userData: any) => {
+  const updateCategory = async (categoryData: any) => {
     if (!id) {
       throw new Error('Error getting id from url');
     }
-    await clientAxios.patch(`/users/${id}`, userData);
-    toast.info('User updated successfully');
+    await clientAxios.patch(`/categories/${id}`, categoryData);
+    toast.info('Category updated successfully');
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchCategoryData = async () => {
       if (isAddMode) {
-        setUserData(initUserForm);
+        setCategoryData(initCategoryForm);
       } else {
-        const response = await clientAxios.get(`/users/${id}`);
-        setUserData(response.data);
+        const response = await clientAxios.get(`/categories/${id}`);
+        setCategoryData(response.data);
       }
     };
-    fetchUserData().catch((error) => console.log(error));
+    fetchCategoryData().catch((error) => console.log(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
     <>
-      <ContentHeader title='Create User' />
+      <ContentHeader title='Create Category' />
 
       <section className='content'>
         <div className='row'>
           <div className='col-md-12'>
             <div className='card card-primary'>
               <div className='card-header'>
-                <h3 className='card-title'>Create a new user</h3>
+                <h3 className='card-title'>Create a new category</h3>
                 <div className='card-tools'>
                   <button
                     type='button'
@@ -108,7 +100,7 @@ const AddEdit = () => {
               </div>
               <div className='card-body'>
                 <Form className='form-horizontal' onSubmit={handleSubmit}>
-                  <h3 className='form-section'>User information</h3>
+                  <h3 className='form-section'>Category information</h3>
 
                   <div className='row justify-content-around'>
                     <div className='col-5'>
@@ -143,21 +135,21 @@ const AddEdit = () => {
                         controlId='email'
                       >
                         <Form.Label className='col-sm-3 col-form-label pr-3'>
-                          Email<span className='text-danger'>*</span>
+                          Image URL<span className='text-danger'>*</span>
                         </Form.Label>
                         <div className='col-sm-6 p-0'>
                           <Form.Control
-                            name='email'
-                            type='email'
-                            placeholder='Enter email'
+                            name='image'
+                            type='text'
+                            placeholder='Enter image url'
                             onChange={handleChange}
-                            value={values.email}
-                            isValid={touched.email && !errors.email}
-                            isInvalid={touched.email && !!errors.email}
+                            value={values.image}
+                            isValid={touched.image && !errors.image}
+                            isInvalid={touched.image && !!errors.image}
                           />
-                          {touched.email && errors.email && (
+                          {touched.image && errors.image && (
                             <Form.Control.Feedback type='invalid'>
-                              {errors.email}
+                              {errors.image}
                             </Form.Control.Feedback>
                           )}
                         </div>
@@ -165,100 +157,58 @@ const AddEdit = () => {
                     </div>
                   </div>
 
-                  {isAddMode && (
-                    <div className='row justify-content-around'>
-                      <div className='col-5'>
-                        <Form.Group
-                          className='form-group row text-right'
-                          controlId='password'
-                        >
-                          <Form.Label className='col-sm-3 col-form-label pr-3'>
-                            Password<span className='text-danger'>*</span>
-                          </Form.Label>
-                          <div className='col-sm-6 p-0'>
-                            <Form.Control
-                              name='password'
-                              type='password'
-                              placeholder='Enter password'
-                              onChange={handleChange}
-                              value={values.password}
-                              isValid={touched.password && !errors.password}
-                              isInvalid={touched.password && !!errors.password}
-                            />
-                            {touched.password && errors.password && (
-                              <Form.Control.Feedback type='invalid'>
-                                {errors.password}
-                              </Form.Control.Feedback>
-                            )}
-                          </div>
-                        </Form.Group>
-                      </div>
-                      <div className='col-5'>
-                        <Form.Group
-                          className='form-group row text-right'
-                          controlId='confirmPassword'
-                        >
-                          <Form.Label className='col-sm-3 col-form-label pr-3'>
-                            Confirm password
-                            <span className='text-danger'>*</span>
-                          </Form.Label>
-                          <div className='col-sm-6 p-0'>
-                            <Form.Control
-                              name='confirmPassword'
-                              type='password'
-                              placeholder='Confirm password'
-                              onChange={handleChange}
-                              value={values.confirmPassword}
-                              isValid={
-                                touched.confirmPassword &&
-                                !errors.confirmPassword
-                              }
-                              isInvalid={
-                                touched.confirmPassword &&
-                                !!errors.confirmPassword
-                              }
-                            />
-                          </div>
-                        </Form.Group>
-                      </div>
-                    </div>
-                  )}
-
                   <div className='row justify-content-around'>
                     <div className='col-5'>
                       <Form.Group
                         className='form-group row text-right'
-                        controlId='role'
+                        controlId='background_color'
                       >
                         <Form.Label className='col-sm-3 col-form-label pr-3'>
-                          Role<span className='text-danger'>*</span>
+                          Background Color<span className='text-danger'>*</span>
                         </Form.Label>
-                        <div className='col-sm-6 p-0'>
-                          <Form.Select
-                            id='role'
-                            name='role'
-                            className='custom-select'
-                            aria-label='Default select example'
+                        <div className='col-sm-2 p-0'>
+                          <Form.Control
+                            name='background_color'
+                            type='color'
                             onChange={handleChange}
-                            value={values.role}
-                            isValid={touched.role && !errors.role}
-                            isInvalid={touched.role && !!errors.role}
-                          >
-                            <option value='' disabled={true}>
-                              Select one
-                            </option>
-                            <option value='user'>User</option>
-                            <option value='admin'>Admin</option>
-                          </Form.Select>
-                          {touched.role && errors.role && (
-                            <Form.Control.Feedback type='invalid'>
-                              {errors.role}
-                            </Form.Control.Feedback>
-                          )}
+                            value={values.background_color}
+                            isValid={
+                              touched.background_color &&
+                              !errors.background_color
+                            }
+                            isInvalid={
+                              touched.background_color &&
+                              !!errors.background_color
+                            }
+                          />
+                          {touched.background_color &&
+                            errors.background_color && (
+                              <Form.Control.Feedback type='invalid'>
+                                {errors.background_color}
+                              </Form.Control.Feedback>
+                            )}
                         </div>
                       </Form.Group>
                     </div>
-                    <div className='col-5'></div>
+                    <div className='col-5'>
+                      <Form.Group
+                        className='form-group row text-right'
+                        controlId='active'
+                      >
+                        <Form.Label className='col-sm-3 col-form-label pr-3'>
+                          Active<span className='text-danger'>*</span>
+                        </Form.Label>
+                        <div className='col-sm-1 d-flex justify-content-center'>
+                          <Form.Check
+                            type='checkbox'
+                            id='active'
+                            checked={values.active}
+                            onChange={handleChange}
+                            className='d-flex align-items-center'
+                          />
+                        </div>
+                      </Form.Group>
+                    </div>
                   </div>
                   <div className='row'>
                     <div className='col-12'>
